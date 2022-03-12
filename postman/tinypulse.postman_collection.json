@@ -1,0 +1,326 @@
+{
+	"info": {
+		"_postman_id": "2154102b-d7bd-41e5-b3e0-b5e6b4a47c96",
+		"name": "Trang",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Cheers-200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response with valid Json\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.be.an(\"array\");",
+							"    pm.expect(jsonData.meta).to.have.keys(\"current_page\", \"total_pages\", \"per_page\");",
+							"    pm.expect(jsonData.links).to.have.keys(\"first\", \"last\", \"self\", \"next\", \"prev\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 3s\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(3000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AccessToken",
+						"value": "a22eb92e7ac775db48a1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.tinypulse.com/v1/cheers",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tinypulse",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cheers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cheers-401-WrongToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AccessToken",
+						"value": "a22eb92e7ac775db48a2",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.tinypulse.com/v1/cheers",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tinypulse",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cheers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cheers-200-Template",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response with valid Json\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    const {data, meta, links}=jsonData",
+							"    const {current_page,total_pages, per_page}=meta",
+							"    const numOfItems=data.length",
+							"    const correctPageNumber = pm.request.url.query.get(\"page[number]\");",
+							"    const correctPageSize = pm.request.url.query.get(\"page[size]\");",
+							"    pm.expect(numOfItems <= correctPageSize && current_page==correctPageNumber).true",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AccessToken",
+						"value": "a22eb92e7ac775db48a1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.tinypulse.com/v1/cheers?page[number]=2&page[size]=2",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tinypulse",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cheers"
+					],
+					"query": [
+						{
+							"key": "page[number]",
+							"value": "2"
+						},
+						{
+							"key": "page[size]",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cheers-401-MissingToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {",
+							"    pm.response.to.have.status(401);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AccessToken",
+						"value": "a22eb92e7ac775db48a2",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://api.tinypulse.com/v1/cheers",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tinypulse",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cheers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cheers-200-DataNull",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response with valid Json\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    const {data, meta, links}=jsonData",
+							"    const {current_page,total_pages, per_page}=meta",
+							"    const numOfItems=data.length",
+							"    pm.expect(numOfItems == 0).true",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AccessToken",
+						"value": "a22eb92e7ac775db48a1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.tinypulse.com/v1/cheers?page[number]=4&page[size]=100",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tinypulse",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cheers"
+					],
+					"query": [
+						{
+							"key": "page[number]",
+							"value": "4"
+						},
+						{
+							"key": "page[size]",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cheers-200-DataLength",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response with valid Json\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    const {data, meta, links}=jsonData",
+							"    const {current_page,total_pages, per_page}=meta",
+							"    const numOfItems=data.length",
+							"    pm.expect(numOfItems == 100).true",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "AccessToken",
+						"value": "a22eb92e7ac775db48a1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.tinypulse.com/v1/cheers?page[number]=2&page[size]=100",
+					"protocol": "https",
+					"host": [
+						"api",
+						"tinypulse",
+						"com"
+					],
+					"path": [
+						"v1",
+						"cheers"
+					],
+					"query": [
+						{
+							"key": "page[number]",
+							"value": "2"
+						},
+						{
+							"key": "page[size]",
+							"value": "100"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
